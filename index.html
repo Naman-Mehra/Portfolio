@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Carter — Senior Product Designer</title>
+  <meta name="description" content="FAANG-level product design portfolio centered on case study storytelling, decision-making, and interaction design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="progress-indicator" id="progressIndicator"></div>
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="#top">Alex Carter</a>
+      <div class="nav-actions">
+        <button class="mode-toggle" id="modeToggle" aria-label="Toggle dark mode">◐</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero container reveal">
+      <p class="eyebrow">Senior Product Designer • B2B SaaS + Consumer</p>
+      <h1>I design decision-first experiences that reduce friction and grow trust at scale.</h1>
+      <p class="lead">Focused on ambiguity-heavy product bets, measurable outcomes, and interaction systems that hold up in production.</p>
+    </section>
+
+    <section class="featured container reveal">
+      <div class="section-head">
+        <h2>Featured case studies</h2>
+        <div class="filter-wrap">
+          <label for="domainFilter" class="sr-only">Filter case studies</label>
+          <select id="domainFilter" class="filter-select">
+            <option value="all">All domains</option>
+            <option value="fintech">Fintech</option>
+            <option value="health">Healthtech</option>
+            <option value="ai">AI Productivity</option>
+          </select>
+        </div>
+      </div>
+      <div class="case-grid" id="caseGrid"></div>
+    </section>
+
+    <section id="caseStudyRoot"></section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
