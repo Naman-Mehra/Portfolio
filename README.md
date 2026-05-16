@@ -1,31 +1,22 @@
-# SafeBite AI MVP
+# SafeBite AI Web App Preview
 
-SafeBite AI is a mobile-first Next.js prototype for helping international shoppers quickly decide whether packaged food matches their dietary restrictions.
+This repository includes a standalone **`index.html`** preview for SafeBite AI.
 
-## Features included
-- Splash + onboarding flow with diet profile presets.
-- Scanner-first home with mock AI processing state.
-- Simulated dietary compatibility engine with confidence messaging.
-- Ingredient-level explainability panel (why + source + confidence).
-- History, preferences, and accessibility pages.
-- Empathetic tone and low-cognitive-load interaction patterns.
-
-## Stack
-- Next.js (App Router)
-- React + TypeScript
-- Tailwind CSS
-
-## Run locally
+## Preview locally (no npm required)
 ```bash
-cd my-app
-npm install
-npm run dev
+cd /workspace/Portfolio
+python3 -m http.server 8080
 ```
+Then open:
+- http://localhost:8080/index.html
 
-## Architecture highlights
-- `app/` route-based screen composition.
-- `components/ScannerUI.tsx` central scan flow + mock AI decision logic.
-- Extensible model for plugging in OCR + OpenAI ingredient analysis later.
+## What is included in the HTML preview
+- Mobile-first UI shell
+- Sensitivity selector (strict/moderate/flexible)
+- Simulated AI scan processing
+- Safety result (Unsafe / Possibly Unsafe)
+- Ingredient list with color-coded risk
+- Tap ingredient for explanation + source + confidence
 
-## Mock AI behavior
-Current MVP intentionally uses static ingredient analysis and simulated delays so UX and HCI interactions can be tested before backend integration.
+## Note
+The preview is a static frontend demo intended for HCI flow validation.

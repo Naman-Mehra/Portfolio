@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeBite AI - Web App Preview</title>
+  <style>
+    :root {
+      --bg: #f7faf9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --safe: #0f766e;
+      --warn: #b45309;
+      --unsafe: #b91c1c;
+      --border: #dbe4ea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .app { max-width: 430px; margin: 0 auto; min-height: 100vh; padding: 16px; display: grid; gap: 12px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 14px; }
+    h1,h2,h3,p { margin: 0; }
+    .muted { color: var(--muted); }
+    .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .chip { border:0; border-radius: 999px; padding: 8px 12px; background:#edf2f7; cursor:pointer; }
+    .chip.active { background:#111827; color:#fff; }
+    .btn { width:100%; border:0; border-radius:12px; padding: 12px; font-weight:700; cursor:pointer; }
+    .btn-primary { background:#0f766e; color:#fff; }
+    .status-safe{ color:var(--safe);} .status-warn{ color:var(--warn);} .status-unsafe{ color:var(--unsafe);}
+    .ingredient { width:100%; display:flex; justify-content:space-between; padding:10px; border:1px solid var(--border); border-radius:12px; background:#fff; margin-top:8px; cursor:pointer; }
+    .tiny { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <section class="card">
+      <p class="tiny status-safe"><strong>SafeBite AI</strong></p>
+      <h1>Calm ingredient guidance while you shop.</h1>
+      <p class="muted">Scan labels and get clear, plain-language safety decisions.</p>
+    </section>
+
+    <section class="card">
+      <h2>Sensitivity</h2>
+      <div class="chips">
+        <button class="chip active" data-level="strict">Strict</button>
+        <button class="chip" data-level="moderate">Moderate</button>
+        <button class="chip" data-level="flexible">Flexible</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Scan product</h2>
+      <p class="muted">Front pack, ingredient list, and optional barcode.</p>
+      <button id="scanBtn" class="btn btn-primary" style="margin-top:10px;">Start AI scan</button>
+    </section>
+
+    <section id="processing" class="card" hidden>
+      <p>Analyzing ingredients and hidden additives...</p>
+    </section>
+
+    <section id="result" class="card" hidden>
+      <h2 id="verdict"></h2>
+      <p id="explanation" class="muted"></p>
+      <div id="ingredients"></div>
+    </section>
+
+    <section id="detail" class="card" hidden>
+      <h3 id="detailName"></h3>
+      <p id="detailWhy" class="muted"></p>
+      <p id="detailMeta" class="tiny"></p>
+    </section>
+  </main>
+
+  <script>
+    const data = [
+      { name: 'Whey Powder', level: 'unsafe', why: 'Milk-derived ingredient; not vegan.', source: 'Ingredient ontology', confidence: 94 },
+      { name: 'E120', level: 'unsafe', why: 'Cochineal color from insects.', source: 'Additive library', confidence: 91 },
+      { name: 'Mono & diglycerides', level: 'warn', why: 'Could be plant or animal sourced.', source: 'Regulatory label pattern', confidence: 66 },
+      { name: 'Oat flour', level: 'safe', why: 'Plant-based ingredient.', source: 'Model inference', confidence: 96 }
+    ];
+
+    let sensitivity = 'strict';
+    const chips = document.querySelectorAll('.chip');
+    const processing = document.getElementById('processing');
+    const result = document.getElementById('result');
+    const verdict = document.getElementById('verdict');
+    const explanation = document.getElementById('explanation');
+    const ingredients = document.getElementById('ingredients');
+    const detail = document.getElementById('detail');
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        sensitivity = chip.dataset.level;
+      });
+    });
+
+    document.getElementById('scanBtn').addEventListener('click', () => {
+      detail.hidden = true;
+      result.hidden = true;
+      processing.hidden = false;
+      setTimeout(() => {
+        processing.hidden = true;
+        result.hidden = false;
+
+        const outcome = sensitivity === 'flexible' ? 'warn' : 'unsafe';
+        verdict.className = outcome === 'unsafe' ? 'status-unsafe' : 'status-warn';
+        verdict.textContent = outcome === 'unsafe' ? 'Unsafe' : 'Possibly Unsafe';
+        explanation.textContent = outcome === 'unsafe'
+          ? 'This product may not match your dietary preferences.'
+          : 'Potentially unsafe. Manual verification recommended.';
+
+        ingredients.innerHTML = '';
+        data.forEach((item) => {
+          const row = document.createElement('button');
+          row.className = 'ingredient';
+          row.innerHTML = `<span>${item.name}</span><strong class="status-${item.level}">${item.level === 'warn' ? 'caution' : item.level}</strong>`;
+          row.addEventListener('click', () => {
+            detail.hidden = false;
+            document.getElementById('detailName').textContent = item.name;
+            document.getElementById('detailWhy').textContent = item.why;
+            document.getElementById('detailMeta').textContent = `Source: ${item.source} · Confidence: ${item.confidence}%`;
+          });
+          ingredients.appendChild(row);
+        });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
